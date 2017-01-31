@@ -1,9 +1,8 @@
 /************************************************************************************
- * configs/nucleo-f4x1re/src/stm32_boot.c
+ * configs/stm32f4discovery/src/stm32_pwm.c
  *
- *   Copyright (C) 2014-2015 Gregory Nutt. All rights reserved.
+ *   Copyright (C) 2011 Gregory Nutt. All rights reserved.
  *   Author: Gregory Nutt <gnutt@nuttx.org>
- *           Librae <librae8226@gmail.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -40,26 +39,58 @@
 
 #include <nuttx/config.h>
 
+#include <errno.h>
 #include <debug.h>
 
-#include <nuttx/arch.h>
-#include <nuttx/board.h>
-#include <nuttx/spi/spi.h>
-
+#include <nuttx/drivers/pwm.h>
 #include <arch/board/board.h>
 
+#include "chip.h"
 #include "up_arch.h"
-#include "nucleo-f4x1re.h"
-
+#include "stm32_pwm.h"
 /* FIXME : DEBUG : HACK GOLDO */
-int board_pwm_setup(void);
+//#include "stm32f4discovery.h"
 
 /************************************************************************************
  * Pre-processor Definitions
  ************************************************************************************/
+/* Configuration *******************************************************************/
+/* PWM
+ *
+ * The stm32f4discovery has no real on-board PWM devices, but the board can be configured to output
+ * a pulse train using TIM4 CH2.  This pin is used by FSMC is connect to CN5 just for this
+ * purpose:
+ *
+ * PD13 FSMC_A18 / MC_TIM4_CH2OUT pin 33 (EnB)
+ *
+ * FSMC must be disabled in this case!
+ */
+
+#define HAVE_PWM 1
+
+#ifndef CONFIG_PWM
+#  undef HAVE_PWM
+#endif
+
+/* FIXME : DEBUG : HACK GOLDO */
+//#ifndef CONFIG_STM32_TIM4
+//#  undef HAVE_PWM
+//#endif
+
+/* FIXME : DEBUG : HACK GOLDO */
+//#ifndef CONFIG_STM32_TIM4_PWM
+//#  undef HAVE_PWM
+//#endif
+
+/* FIXME : DEBUG : HACK GOLDO */
+//#if CONFIG_STM32_TIM4_CHANNEL != STM32F4DISCOVERY_PWMCHANNEL
+//#  undef HAVE_PWM
+//#endif
+
+#ifdef HAVE_PWM
 
 /************************************************************************************
- * Private Data
+ * Private Functions
  ************************************************************************************/
 
 /************************************************************************************
@@ -67,73 +98,51 @@ int board_pwm_setup(void);
  ************************************************************************************/
 
 /************************************************************************************
- * Name: stm32_boardinitialize
+ * Name: board_pwm_setup
  *
  * Description:
- *   All STM32 architectures must provide the following entry point.  This entry point
- *   is called early in the initialization -- after all memory has been configured
- *   and mapped but before any devices have been initialized.
+ *   All STM32 architectures must provide the following interface to work with
+ *   examples/pwm.
  *
  ************************************************************************************/
 
-void stm32_boardinitialize(void)
+
+int board_pwm_setup(void)
 {
-  /* Configure on-board LEDs if LED support has been selected. */
+  static bool initialized = false;
+  struct pwm_lowerhalf_s *pwm;
+  int ret;
 
-#ifdef CONFIG_ARCH_LEDS
-  board_autoled_initialize();
-#endif
+  /* Have we already initialized? */
 
-  /* Configure SPI chip selects if 1) SP2 is not disabled, and 2) the weak function
-   * stm32_spidev_initialize() has been brought into the link.
-   */
-
-#if defined(CONFIG_STM32_SPI1) || defined(CONFIG_STM32_SPI2) || defined(CONFIG_STM32_SPI3)
-  stm32_spidev_initialize();
-#endif
-
-  /* Initialize USB is 1) USBDEV is selected, 2) the USB controller is not
-   * disabled, and 3) the weak function stm32_usbinitialize() has been brought
-   * into the build.
-   */
-
-#if defined(CONFIG_USBDEV) && defined(CONFIG_STM32_USB)
-  stm32_usbinitialize();
-#endif
-}
-
-/****************************************************************************
- * Name: board_initialize
- *
- * Description:
- *   If CONFIG_BOARD_INITIALIZE is selected, then an additional
- *   initialization call will be performed in the boot-up sequence to a
- *   function called board_initialize().  board_initialize() will be
- *   called immediately after up_intiialize() is called and just before the
- *   initial application is started.  This additional initialization phase
- *   may be used, for example, to initialize board-specific device drivers.
- *
- ****************************************************************************/
-
-#ifdef CONFIG_BOARD_INITIALIZE
-void board_initialize(void)
-{
-  /* Perform NSH initialization here instead of from the NSH.  This
-   * alternative NSH initialization is necessary when NSH is ran in user-space
-   * but the initialization function must run in kernel space.
-   */
-
-#if defined(CONFIG_NSH_LIBRARY) && !defined(CONFIG_LIB_BOARDCTL)
-  board_app_initialize(0);
-#endif
+  if (!initialized)
+    {
+      /* Call stm32_pwminitialize() to get an instance of the PWM interface */
 
 /* FIXME : DEBUG : HACK GOLDO */
-  board_pwm_setup();
+//      pwm = stm32_pwminitialize(STM32F4DISCOVERY_PWMTIMER);
+      pwm = stm32_pwminitialize(2);
+      if (!pwm)
+        {
+          aerr("ERROR: Failed to get the STM32 PWM lower half\n");
+          return -ENODEV;
+        }
 
-  /* CC3000 wireless initialization */
+      /* Register the PWM driver at "/dev/pwm0" */
 
-#ifdef CONFIG_WL_CC3000
-  wireless_archinitialize(0);
-#endif
+      ret = pwm_register("/dev/pwm0", pwm);
+      if (ret < 0)
+        {
+          aerr("ERROR: pwm_register failed: %d\n", ret);
+          return ret;
+        }
+
+      /* Now we are initialized */
+
+      initialized = true;
+    }
+
+  return OK;
 }
-#endif
+
+#endif /* HAVE_PWM */

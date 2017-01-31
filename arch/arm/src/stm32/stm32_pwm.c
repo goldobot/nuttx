@@ -275,6 +275,10 @@
 #  define pwm_dumpgpio(p,m)
 #endif
 
+/* FIXME : DEBUG : HACK GOLDO */
+#define GPIO_TIM2_CH1OUT    (GPIO_ALT|GPIO_AF1|GPIO_SPEED_50MHz|GPIO_PUSHPULL|GPIO_PORTA|GPIO_PIN0)
+
+
 /****************************************************************************
  * Private Types
  ****************************************************************************/
