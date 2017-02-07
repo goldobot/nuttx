@@ -71,4 +71,8 @@ ifeq ($(CONFIG_NSH_LIBRARY),y)
 CSRCS += stm32_appinit.c
 endif
 
+ifeq ($(CONFIG_TIMER),y)
+CSRCS += stm32_timer.c
+endif
+
 include $(TOPDIR)/configs/Board.mk
