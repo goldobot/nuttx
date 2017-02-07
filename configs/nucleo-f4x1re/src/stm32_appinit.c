@@ -149,6 +149,20 @@ int board_app_initialize(uintptr_t arg)
     }
 #endif
 
+#ifdef CONFIG_TIMER
+  /* Initialize and register the timer driver */
+
+  //ret = board_timer_driver_initialize("/dev/timer0", 2);
+  ret = stm32_timer_initialize("/dev/timer0", 3);
+  if (ret != OK)
+    {
+      syslog(LOG_ERR,
+             "ERROR: Failed to register the timer driver: %d\n",
+             ret);
+      return ret;
+    }
+#endif
+
 #ifdef CONFIG_QENCODER
   /* Initialize and register the qencoder driver */
 
