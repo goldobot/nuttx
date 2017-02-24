@@ -36,8 +36,19 @@
 -include $(TOPDIR)/Make.defs
 
 ASRCS =
-# FIXME : DEBUG : HACK GOLDO
-CSRCS = stm32_boot.c stm32_spi.c stm32_pwm.c
+CSRCS = stm32_boot.c
+
+ifeq ($(CONFIG_SPI),y)
+CSRCS += stm32_spi.c
+endif
+
+ifeq ($(CONFIG_PWM),y)
+CSRCS += stm32_pwm.c
+endif
+
+ifeq ($(CONFIG_I2C),y)
+CSRCS += stm32_i2c.c
+endif
 
 ifeq ($(CONFIG_ARCH_LEDS),y)
 CSRCS += stm32_autoleds.c

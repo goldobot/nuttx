@@ -48,13 +48,12 @@
 #include "chip.h"
 #include "up_arch.h"
 #include "stm32_pwm.h"
-/* FIXME : DEBUG : HACK GOLDO */
-//#include "stm32f4discovery.h"
 
 /************************************************************************************
  * Pre-processor Definitions
  ************************************************************************************/
 /* Configuration *******************************************************************/
+
 /* PWM
  *
  * The stm32f4discovery has no real on-board PWM devices, but the board can be configured to output
