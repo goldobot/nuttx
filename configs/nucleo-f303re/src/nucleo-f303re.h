@@ -203,4 +203,8 @@ int stm32_adc_setup(void);
 int stm32_can_setup(void);
 #endif
 
+#ifdef CONFIG_QENCODER
+int stm32_qencoder_initialize(FAR const char *devpath, int timer);
+#endif
+
 #endif /* __CONFIGS_NUCLEO_F303RE_SRC_NUCLEO_F303RE_H */

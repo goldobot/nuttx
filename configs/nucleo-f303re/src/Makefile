@@ -86,4 +86,8 @@ ifeq ($(CONFIG_BOARDCTL_UNIQUEID),y)
 CSRCS += stm32_uid.c
 endif
 
+ifeq ($(CONFIG_QENCODER),y)
+CSRCS += stm32_qencoder.c
+endif
+
 include $(TOPDIR)/configs/Board.mk
