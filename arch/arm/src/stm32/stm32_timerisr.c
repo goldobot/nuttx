@@ -85,6 +85,24 @@
 #  error SYSTICK_RELOAD exceeds the range of the RELOAD register
 #endif
 
+#if CONFIG_JITEST
+#if defined( CONFIG_ARCH_CHIP_STM32)
+#include "stm32gpio.h"
+#define GPIOCONFIG stm32_configgpio
+#define GPIOWRITE  stm32_gpiowrite
+#elif defined( CONFIG_ARCH_CHIP_STM32L4)
+#include "stm32l4gpio.h"
+#define GPIOCONFIG stm32l4_configgpio
+#define GPIOWRITE  stm32l4_gpiowrite
+#else
+#error this app is only for stm32
+#endif
+#define GPIO_IRQ (GPIO_PORTC|GPIO_PIN11|GPIO_OUTPUT|GPIO_SPEED_50MHz|GPIO_PUSHPULL|GPIO_OUTPUT_CLEAR)
+
+unsigned int global_test_irq_gpio = 0;
+#endif
+
+
 /****************************************************************************
  * Private Types
  ****************************************************************************/
@@ -109,6 +127,11 @@
 int up_timerisr(int irq, uint32_t *regs)
 {
   /* Process timer interrupt */
+
+#if CONFIG_JITEST
+  GPIOWRITE(GPIO_IRQ, global_test_irq_gpio);
+  global_test_irq_gpio = !global_test_irq_gpio;
+#endif
 
   sched_process_timer();
   return 0;

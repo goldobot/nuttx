@@ -709,6 +709,7 @@ config ARCH_BOARD_NUCLEO_F401RE
 	select ARCH_HAVE_LEDS
 	select ARCH_HAVE_BUTTONS
 	select ARCH_HAVE_IRQBUTTONS
+	select ARCH_BOARD_NUCLEO_F4X1RE
 	---help---
 		This is a minimal configuration that supports low-level test of the
 		Nucleo F401RE in the NuttX source tree.
@@ -719,6 +720,7 @@ config ARCH_BOARD_NUCLEO_F411RE
 	select ARCH_HAVE_LEDS
 	select ARCH_HAVE_BUTTONS
 	select ARCH_HAVE_IRQBUTTONS
+	select ARCH_BOARD_NUCLEO_F4X1RE
 	---help---
 		This is a minimal configuration that supports low-level test of the
 		Nucleo F411RE in the NuttX source tree.
@@ -1355,6 +1357,9 @@ config BOARD_CUSTOM_INTERRUPT
 endmenu # Custom Board Configuration
 endif #ARCH_BOARD_CUSTOM
 
+config ARCH_BOARD_NUCLEO_F4X1RE
+	bool
+
 config ARCH_BOARD
 	string
 	default "amber"                    if ARCH_BOARD_AMBER
@@ -1425,7 +1430,7 @@ config ARCH_BOARD
 	default "pic32mz-starterkit"       if ARCH_BOARD_PIC32MZ_STARTERKIT
 	default "nucleo-144"               if ARCH_BOARD_NUCLEO_144
 	default "nucleo-f303re"            if ARCH_BOARD_NUCLEO_F303RE
-	default "nucleo-f4x1re"            if ARCH_BOARD_NUCLEO_F401RE || ARCH_BOARD_NUCLEO_F411RE
+	default "nucleo-f4x1re"            if ARCH_BOARD_NUCLEO_F4X1RE
 	default "nucleo-l476rg"            if ARCH_BOARD_NUCLEO_L476RG
 	default "qemu-i486"                if ARCH_BOARD_QEMU_I486
 	default "sabre-6quad"              if ARCH_BOARD_SABRE_6QUAD
@@ -1722,7 +1727,7 @@ endif
 if ARCH_BOARD_NUCLEO_F303RE
 source "configs/nucleo-f303re/Kconfig"
 endif
-if ARCH_BOARD_NUCLEO_F401RE || ARCH_BOARD_NUCLEO_F411RE
+if ARCH_BOARD_NUCLEO_F4X1RE
 source "configs/nucleo-f4x1re/Kconfig"
 endif
 if ARCH_BOARD_NUCLEO_L476RG

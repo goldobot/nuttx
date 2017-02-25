@@ -344,4 +344,12 @@ int stm32_qencoder_initialize(FAR const char *devpath, int timer);
 int board_ajoy_initialize(void);
 #endif
 
+#ifdef CONFIG_PWM
+int board_pwm_setup(void);
+#endif
+
+#if defined(CONFIG_STM32_I2C) && defined(CONFIG_I2C)
+void stm32_i2c_register(int bus);
+#endif
+
 #endif /* __CONFIGS_NUCLEO_F401RE_SRC_NUCLEO_F401RE_H */

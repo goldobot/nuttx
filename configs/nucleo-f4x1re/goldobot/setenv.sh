@@ -1,10 +1,8 @@
-############################################################################
-# configs/nucleo-f303re/src/Makefile
+#!/bin/bash
+# configs/nucleo-f4x1re/f411-nsh/setenv.sh
 #
 #   Copyright (C) 2014 Gregory Nutt. All rights reserved.
-#   Copyright (C) 2015 Omni Hoverboards Inc. All rights reserved.
-#   Authors: Gregory Nutt <gnutt@nuttx.org>
-#            Paul Alexander Patience <paul-a.patience@polymtl.ca>
+#   Author: Gregory Nutt <gnutt@nuttx.org>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,61 +31,34 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-############################################################################
 
--include $(TOPDIR)/Make.defs
+if [ "$_" = "$0" ] ; then
+  echo "You must source this script, not run it!" 1>&2
+  exit 1
+fi
 
-ASRCS =
-CSRCS = stm32_boot.c
+WD=`pwd`
+if [ ! -x "setenv.sh" ]; then
+  echo "This script must be executed from the top-level NuttX build directory"
+  exit 1
+fi
 
-ifeq ($(CONFIG_ARCH_LEDS),y)
-CSRCS += stm32_autoleds.c
-else
-CSRCS += stm32_userleds.c
-endif
+if [ -z "${PATH_ORIG}" ]; then
+  export PATH_ORIG="${PATH}"
+fi
 
-ifeq ($(CONFIG_ARCH_BUTTONS),y)
-CSRCS += stm32_buttons.c
-endif
+# This the Cygwin path to the location where I installed the CodeSourcery
+# toolchain under windows.  You will also have to edit this if you install
+# the CodeSourcery toolchain in any other location
+#export TOOLCHAIN_BIN="/cygdrive/c/Program Files (x86)/CodeSourcery/Sourcery G++ Lite/bin"
+export TOOLCHAIN_BIN="/cygdrive/c/Program Files (x86)/CodeSourcery/Sourcery_CodeBench_Lite_for_ARM_EABI/bin"
+#export TOOLCHAIN_BIN="/cygdrive/c/Users/MyName/MentorGraphics/Sourcery_CodeBench_Lite_for_ARM_EABI/bin"
 
-ifeq ($(CONFIG_LIB_BOARDCTL),y)
-CSRCS += stm32_appinitialize.c
-endif
+# This the Cygwin path to the location where I build the buildroot
+# toolchain.
+#export TOOLCHAIN_BIN="${WD}/../buildroot/build_arm_nofpu/staging_dir/bin"
 
-ifeq ($(CONFIG_ADC),y)
-CSRCS += stm32_adc.c
-endif
+# Add the path to the toolchain to the PATH varialble
+export PATH="${TOOLCHAIN_BIN}:/sbin:/usr/sbin:${PATH_ORIG}"
 
-ifeq ($(CONFIG_CAN),y)
-CSRCS += stm32_can.c
-endif
-
-ifeq ($(CONFIG_DAC),y)
-CSRCS += stm32_dac.c
-endif
-
-ifeq ($(CONFIG_PWM),y)
-CSRCS += stm32_pwm.c
-endif
-
-ifeq ($(CONFIG_SPI),y)
-CSRCS += stm32_spi.c
-endif
-
-ifeq ($(CONFIG_LCD_SSD1351),y)
-CSRCS += stm32_ssd1351.c
-endif
-
-ifeq ($(CONFIG_TIMER),y)
-CSRCS += stm32_timer.c
-endif
-
-ifeq ($(CONFIG_BOARDCTL_UNIQUEID),y)
-CSRCS += stm32_uid.c
-endif
-
-ifeq ($(CONFIG_QENCODER),y)
-CSRCS += stm32_qencoder.c
-endif
-
-include $(TOPDIR)/configs/Board.mk
+echo "PATH : ${PATH}"

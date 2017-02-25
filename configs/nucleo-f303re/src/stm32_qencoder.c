@@ -48,7 +48,6 @@
 #include "chip.h"
 #include "up_arch.h"
 #include "stm32_qencoder.h"
-#include "nucleo-f4x1re.h"
 
 /************************************************************************************
  * Public Functions
@@ -73,7 +72,7 @@ int stm32_qencoder_initialize(FAR const char *devpath, int timer)
   ret = stm32_qeinitialize(devpath, timer);
   if (ret < 0)
     {
-      snerr("ERROR: stm32_qeinitialize failed: %d\n", ret);
+	snerr("ERROR: stm32_qeinitialize failed: %d\n", ret);
     }
 
   return ret;

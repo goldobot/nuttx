@@ -5,4 +5,9 @@
 
 if ARCH_BOARD_NUCLEO_F303RE
 
-endif
+config NUCLEO_F303RE_QETIMER
+	int "Timer to use with QE encoder"
+	default 3
+	depends on QENCODER
+
+endif # ARCH_BOARD_NUCLEO_F303RE

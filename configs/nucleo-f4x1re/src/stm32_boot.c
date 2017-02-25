@@ -51,10 +51,6 @@
 #include "up_arch.h"
 #include "nucleo-f4x1re.h"
 
-/* FIXME : DEBUG : HACK GOLDO */
-void stm32_i2c_register(int bus);
-int board_pwm_setup(void);
-
 /************************************************************************************
  * Pre-processor Definitions
  ************************************************************************************/
@@ -128,10 +124,13 @@ void board_initialize(void)
   board_app_initialize(0);
 #endif
 
-/* FIXME : DEBUG : HACK GOLDO */
+#if defined(CONFIG_STM32_I2C) && defined(CONFIG_I2C)
   stm32_i2c_register(1);
-  board_pwm_setup();
+#endif
 
+#ifdef CONFIG_PWM
+  board_pwm_setup();
+#endif
   /* CC3000 wireless initialization */
 
 #ifdef CONFIG_WL_CC3000
@@ -139,26 +138,4 @@ void board_initialize(void)
 #endif
 }
 #endif
-
-void
-stm32_i2c_register(int bus)
-{
-  FAR struct i2c_master_s *i2c;
-  int ret;
-
-  i2c = stm32_i2cbus_initialize(bus);
-  if (i2c == NULL)
-    {
-      serr("ERROR: Failed to get I2C%d interface\n", bus);
-    }
-  else
-    {
-      ret = i2c_register(i2c, bus);
-      if (ret < 0)
-        {
-          serr("ERROR: Failed to register I2C%d driver: %d\n", bus, ret);
-          stm32_i2cbus_uninitialize(i2c);
-        }
-    }
-}
 

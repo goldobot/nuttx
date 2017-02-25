@@ -219,6 +219,19 @@
 #define GPIO_TIM2_CH1IN (GPIO_TIM2_CH1IN_1 | GPIO_PULLUP)
 #define GPIO_TIM2_CH2IN (GPIO_TIM2_CH2IN_1 | GPIO_PULLUP)
 
+#define GPIO_TIM3_CH1IN    GPIO_TIM3_CH1IN_2
+#define GPIO_TIM3_CH2IN    GPIO_TIM3_CH2IN_2
+
+#define GPIO_TIM4_CH1IN    GPIO_TIM4_CH1IN_1
+#define GPIO_TIM4_CH2IN    GPIO_TIM4_CH2IN_1
+
+#define QENCODER1_A        GPIO_TIM3_CH1IN
+#define QENCODER1_B        GPIO_TIM3_CH2IN
+
+#define QENCODER2_A        GPIO_TIM4_CH1IN
+#define QENCODER2_B        GPIO_TIM4_CH2IN
+
+
 /************************************************************************************
  * Public Data
  ************************************************************************************/

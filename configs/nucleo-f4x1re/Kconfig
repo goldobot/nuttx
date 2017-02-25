@@ -3,14 +3,14 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-if ARCH_BOARD_NUCLEO_F401RE
+if ARCH_BOARD_NUCLEO_F4X1RE
 
-config NUCLEO_F401RE_QETIMER
+config NUCLEO_F4X1RE_QETIMER
 	int "Timer to use with QE encoder"
 	default 3
 	depends on QENCODER
 
-config NUCLEO_F401RE_AJOY_MINBUTTONS
+config NUCLEO_F4X1RE_AJOY_MINBUTTONS
 	bool "Minimal Joystick Buttons"
 	default n if !STM32_USART1
 	default y if STM32_USART1
@@ -23,4 +23,4 @@ config NUCLEO_F401RE_AJOY_MINBUTTONS
 		minimal set:  SELECT (joystick down), FIRE (BUTTON B), and JUMP
 		(BUTTON A).
 
-endif # ARCH_BOARD_NUCLEO_F401RE
+endif # ARCH_BOARD_NUCLEO_F4X1RE
