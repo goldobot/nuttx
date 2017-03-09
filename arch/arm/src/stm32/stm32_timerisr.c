@@ -85,7 +85,7 @@
 #  error SYSTICK_RELOAD exceeds the range of the RELOAD register
 #endif
 
-#if CONFIG_JITEST
+#ifdef CONFIG_JITEST
 #if defined( CONFIG_ARCH_CHIP_STM32)
 #include "stm32gpio.h"
 #define GPIOCONFIG stm32_configgpio
