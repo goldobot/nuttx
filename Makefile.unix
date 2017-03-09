@@ -590,3 +590,5 @@ apps_distclean:
 ifneq ($(APPDIR),)
 	$(Q) $(MAKE) -C "$(TOPDIR)/$(APPDIR)" TOPDIR="$(TOPDIR)" distclean
 endif
+
+-include $(TOPDIR)/goldobot.mk
