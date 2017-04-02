@@ -209,42 +209,45 @@
 /* Alternate function pin selections ****************************************/
 /* CAN */
 
-#define GPIO_CAN1_RX GPIO_CAN_RX_2
-#define GPIO_CAN1_TX GPIO_CAN_TX_2
+#define GPIO_CAN1_RX GPIO_CAN_RX_2 /* PA.11 */
+#define GPIO_CAN1_TX GPIO_CAN_TX_2 /* PA.12 */
 
 /* I2C */
 
-#define GPIO_I2C1_SCL GPIO_I2C1_SCL_3
-#define GPIO_I2C1_SDA GPIO_I2C1_SDA_3
+#define GPIO_I2C1_SCL GPIO_I2C1_SCL_3 /* PB.8 */
+#define GPIO_I2C1_SDA GPIO_I2C1_SDA_3 /* PB.9 */
 
 /* SPI */
 
-#define GPIO_SPI1_MISO GPIO_SPI1_MISO_1
-#define GPIO_SPI1_MOSI GPIO_SPI1_MOSI_1
-#define GPIO_SPI1_SCK GPIO_SPI1_SCK_1
+#define GPIO_SPI1_MISO GPIO_SPI1_MISO_1 /* PA.6 */
+#define GPIO_SPI1_MOSI GPIO_SPI1_MOSI_1 /* PA.7 */
+#define GPIO_SPI1_SCK GPIO_SPI1_SCK_1   /* PA.5 */
 
 /* TIM */
 
-#define GPIO_TIM2_CH2OUT GPIO_TIM2_CH2OUT_2
-#define GPIO_TIM2_CH3OUT GPIO_TIM2_CH3OUT_3
+/* PWM moteurs */
+#define GPIO_TIM1_CH1OUT GPIO_TIM1_CH1OUT_2 /* PA.8 */
 
-#define GPIO_TIM3_CH1OUT GPIO_TIM3_CH1OUT_2
-#define GPIO_TIM3_CH2OUT GPIO_TIM3_CH2OUT_4
+#define GPIO_TIM2_CH2OUT GPIO_TIM2_CH2OUT_1 /* PA.1 */
 
-#define GPIO_TIM3_CH1IN    GPIO_TIM3_CH1IN_2
-#define GPIO_TIM3_CH2IN    GPIO_TIM3_CH2IN_3
+/* QEI (odometrie) */
+#define GPIO_TIM3_CH1IN  GPIO_TIM3_CH1IN_2  /* PB.4 */
+#define GPIO_TIM3_CH2IN  GPIO_TIM3_CH2IN_3  /* PB.5 */
 
-#define GPIO_TIM4_CH1OUT GPIO_TIM4_CH1OUT_2
+#define GPIO_TIM4_CH1IN  GPIO_TIM4_CH1IN_2  /* PB.6 */
+#define GPIO_TIM4_CH2IN  GPIO_TIM4_CH2IN_2  /* PB.7 */
 
-/* USART */
+/* USART console */
 
-#define GPIO_USART2_RX GPIO_USART2_RX_2
-#define GPIO_USART2_TX GPIO_USART2_TX_2
+#define GPIO_USART2_RX GPIO_USART2_RX_2 /* PA.3 */
+#define GPIO_USART2_TX GPIO_USART2_TX_2 /* PA.2 */
 
+/* USART servo Dynamixel */
 #define GPIO_USART1_RX GPIO_USART1_RX_1 /* PA.10 */
 #define GPIO_USART1_TX GPIO_USART1_TX_1 /* PA.9 */
 #define GPIO_USART1_RS485_DIR (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
                                GPIO_OUTPUT_CLEAR|GPIO_PORTA|GPIO_PIN0)
+                                        /* PA.0 */
 
 /* DMA channels *************************************************************/
 /* ADC */

@@ -118,6 +118,22 @@ int board_app_initialize(uintptr_t arg)
     }
 #endif
 
+/* FIXME : DEBUG : HACK GOLDO ++ */
+
+#ifdef CONFIG_TIMER
+  /* Initialize and register the timer driver */
+
+  ret = stm32_timer_initialize("/dev/timer0", 6);
+  if (ret != OK)
+    {
+      syslog(LOG_ERR,
+             "ERROR: Failed to register the timer driver: %d\n",
+             ret);
+      return ret;
+    }
+#endif
+/* FIXME : DEBUG : HACK GOLDO -- */
+
   /* Contrairement à l'ADC, il n'y a pas de BOARDIOC_DAC_SETUP spécifique. Il
    * faut le faire ici
    */

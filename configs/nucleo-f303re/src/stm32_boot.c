@@ -44,7 +44,13 @@
 #include <nuttx/board.h>
 #include <arch/board/board.h>
 
+#include <debug.h>
+
 #include "nucleo-f303re.h"
+
+/* FIXME : DEBUG : HACK GOLDO */
+void stm32_i2c_register(int bus);
+int board_pwm_setup(void);
 
 /****************************************************************************
  * Pre-processor Definitions
@@ -97,3 +103,52 @@ void stm32_boardinitialize(void)
   board_autoled_initialize();
 #endif
 }
+
+
+#if 1 /* FIXME : DEBUG : HACK GOLDO */
+#ifdef CONFIG_BOARD_INITIALIZE
+void board_initialize(void)
+{
+  /* Perform NSH initialization here instead of from the NSH.  This
+   * alternative NSH initialization is necessary when NSH is ran in user-space
+   * but the initialization function must run in kernel space.
+   */
+
+#if defined(CONFIG_NSH_LIBRARY) && !defined(CONFIG_LIB_BOARDCTL)
+  board_app_initialize(0);
+#endif
+
+  stm32_i2c_register(1);
+  //board_pwm_setup();
+
+  /* CC3000 wireless initialization */
+
+#ifdef CONFIG_WL_CC3000
+  //wireless_archinitialize(0);
+#endif
+}
+#endif
+
+void
+stm32_i2c_register(int bus)
+{
+  FAR struct i2c_master_s *i2c;
+  int ret;
+
+  i2c = stm32_i2cbus_initialize(bus);
+  if (i2c == NULL)
+    {
+      serr("ERROR: Failed to get I2C%d interface\n", bus);
+    }
+  else
+    {
+      ret = i2c_register(i2c, bus);
+      if (ret < 0)
+        {
+          serr("ERROR: Failed to register I2C%d driver: %d\n", bus, ret);
+          stm32_i2cbus_uninitialize(i2c);
+        }
+    }
+}
+#endif
+
