@@ -68,7 +68,8 @@
 int stm32_pwm_setup(void)
 {
   static bool initialized = false;
-  struct pwm_lowerhalf_s *pwm;
+  struct pwm_lowerhalf_s *pwm0;
+  struct pwm_lowerhalf_s *pwm1;
   int ret;
 
   /* Have we already initialized? */
@@ -77,8 +78,9 @@ int stm32_pwm_setup(void)
     {
       /* Call stm32_pwminitialize() to get an instance of the PWM interface */
 
-      pwm = stm32_pwminitialize(NUCLEO_F303RE_PWMTIMER);
-      if (pwm == NULL)
+      /* HACK GOLDO : PWM pour moteur DROIT (MAXON1) */
+      pwm0 = stm32_pwminitialize(1);
+      if (pwm0 == NULL)
         {
           pwmerr("ERROR: Failed to get the STM32 PWM lower half\n");
           return -ENODEV;
@@ -86,7 +88,24 @@ int stm32_pwm_setup(void)
 
       /* Register the PWM driver at "/dev/pwm0" */
 
-      ret = pwm_register("/dev/pwm0", pwm);
+      ret = pwm_register("/dev/pwm0", pwm0);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register failed: %d\n", ret);
+          return ret;
+        }
+
+      /* HACK GOLDO : PWM pour moteur GAUCHE (MAXON2) */
+      pwm1 = stm32_pwminitialize(2);
+      if (pwm1 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half\n");
+          return -ENODEV;
+        }
+
+      /* Register the PWM driver at "/dev/pwm1" */
+
+      ret = pwm_register("/dev/pwm1", pwm1);
       if (ret < 0)
         {
           pwmerr("ERROR: pwm_register failed: %d\n", ret);
