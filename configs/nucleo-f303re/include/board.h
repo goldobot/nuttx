@@ -227,8 +227,32 @@
 
 /* PWM moteurs */
 #define GPIO_TIM1_CH1OUT GPIO_TIM1_CH1OUT_2 /* PA.8 */
+#define GPIO_MAXON1_PWM_IDDLE (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTA|GPIO_PIN8)
+#define GPIO_MAXON1_DIR_P     (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN1)
+#define GPIO_MAXON1_DIR_N     (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTB|GPIO_PIN1)
+                                            /* PB.1 */
+#define GPIO_MAXON1_DIS       (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTB|GPIO_PIN15)
+#define GPIO_MAXON1_EN        (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN15)
+                                            /* PB.15 */
 
 #define GPIO_TIM2_CH2OUT GPIO_TIM2_CH2OUT_1 /* PA.1 */
+#define GPIO_MAXON2_PWM_IDDLE (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTA|GPIO_PIN1)
+#define GPIO_MAXON2_DIR_P     (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN0)
+#define GPIO_MAXON2_DIR_N     (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTB|GPIO_PIN0)
+                                            /* PB.0 */
+#define GPIO_MAXON2_DIS       (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_SET|GPIO_PORTC|GPIO_PIN1)
+#define GPIO_MAXON2_EN        (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
+			       GPIO_OUTPUT_CLEAR|GPIO_PORTC|GPIO_PIN1)
+                                            /* PC.1 */
 
 /* QEI (odometrie) */
 #define GPIO_TIM3_CH1IN  GPIO_TIM3_CH1IN_2  /* PB.4 */
@@ -239,15 +263,15 @@
 
 /* USART console */
 
-#define GPIO_USART2_RX GPIO_USART2_RX_2 /* PA.3 */
-#define GPIO_USART2_TX GPIO_USART2_TX_2 /* PA.2 */
+#define GPIO_USART2_RX GPIO_USART2_RX_2     /* PA.3 */
+#define GPIO_USART2_TX GPIO_USART2_TX_2     /* PA.2 */
 
 /* USART servo Dynamixel */
-#define GPIO_USART1_RX GPIO_USART1_RX_1 /* PA.10 */
-#define GPIO_USART1_TX GPIO_USART1_TX_1 /* PA.9 */
+#define GPIO_USART1_RX GPIO_USART1_RX_1     /* PA.10 */
+#define GPIO_USART1_TX GPIO_USART1_TX_1     /* PA.9 */
 #define GPIO_USART1_RS485_DIR (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
                                GPIO_OUTPUT_CLEAR|GPIO_PORTA|GPIO_PIN0)
-                                        /* PA.0 */
+                                            /* PA.0 */
 
 /* DMA channels *************************************************************/
 /* ADC */

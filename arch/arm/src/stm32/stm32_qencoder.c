@@ -635,11 +635,19 @@ static void stm32_putreg32(FAR struct stm32_lowerhalf_s *priv, int offset, uint3
 static void stm32_dumpregs(FAR struct stm32_lowerhalf_s *priv, FAR const char *msg)
 {
   sninfo("%s:\n", msg);
+#if defined(CONFIG_STM32_STM32F30XX) /* FIXME : DEBUG : HACK GOLDO */
+  sninfo("  CR1: %04x CR2:  %04x SMCR:  %08x DIER:  %04x\n",
+         stm32_getreg16(priv, STM32_GTIM_CR1_OFFSET),
+         stm32_getreg16(priv, STM32_GTIM_CR2_OFFSET),
+         stm32_getreg32(priv, STM32_GTIM_SMCR_OFFSET),
+         stm32_getreg16(priv, STM32_GTIM_DIER_OFFSET));
+#else
   sninfo("  CR1: %04x CR2:  %04x SMCR:  %04x DIER:  %04x\n",
          stm32_getreg16(priv, STM32_GTIM_CR1_OFFSET),
          stm32_getreg16(priv, STM32_GTIM_CR2_OFFSET),
          stm32_getreg16(priv, STM32_GTIM_SMCR_OFFSET),
          stm32_getreg16(priv, STM32_GTIM_DIER_OFFSET));
+#endif
   sninfo("   SR: %04x EGR:  %04x CCMR1: %04x CCMR2: %04x\n",
          stm32_getreg16(priv, STM32_GTIM_SR_OFFSET),
          stm32_getreg16(priv, STM32_GTIM_EGR_OFFSET),
@@ -820,7 +828,11 @@ static int stm32_setup(FAR struct qe_lowerhalf_s *lower)
 {
   FAR struct stm32_lowerhalf_s *priv = (FAR struct stm32_lowerhalf_s *)lower;
   uint16_t dier;
+#if defined(CONFIG_STM32_STM32F30XX) /* FIXME : DEBUG : HACK GOLDO */
+  uint32_t smcr;
+#else
   uint16_t smcr;
+#endif
   uint16_t ccmr1;
   uint16_t ccer;
   uint16_t cr1;
@@ -889,10 +901,17 @@ static int stm32_setup(FAR struct qe_lowerhalf_s *lower)
 
   /* Set the encoder Mode 3 */
 
+#if defined(CONFIG_STM32_STM32F30XX) /* FIXME : DEBUG : HACK GOLDO */
+  smcr = stm32_getreg32(priv, STM32_GTIM_SMCR_OFFSET);
+  smcr &= ~GTIM_SMCR_SMS_MASK;
+  smcr |= GTIM_SMCR_ENCMD3;
+  stm32_putreg32(priv, STM32_GTIM_SMCR_OFFSET, smcr);
+#else
   smcr = stm32_getreg16(priv, STM32_GTIM_SMCR_OFFSET);
   smcr &= ~GTIM_SMCR_SMS_MASK;
   smcr |= GTIM_SMCR_ENCMD3;
   stm32_putreg16(priv, STM32_GTIM_SMCR_OFFSET, smcr);
+#endif
 
   /* TI1 Channel Configuration */
   /* Disable the Channel 1: Reset the CC1E Bit */
@@ -1030,6 +1049,11 @@ static int stm32_setup(FAR struct qe_lowerhalf_s *lower)
   stm32_putreg16(priv, STM32_GTIM_CR1_OFFSET, cr1);
 
   stm32_dumpregs(priv, "After setup");
+#if 0 /* FIXME : DEBUG : HACK GOLDO */
+  qe_dumpgpio(0x04, "PA4 PA6 PA7");
+  qe_dumpgpio(0x14, "PB.4 PB.5");
+  qe_dumpgpio(0x26, "PC.6 PC.7");
+#endif
 
   return OK;
 }
@@ -1182,7 +1206,11 @@ static int stm32_position(FAR struct qe_lowerhalf_s *lower, FAR int32_t *pos)
 
   /* Return the position measurement */
 
+#if 0 /* FIXME : DEBUG : HACK GOLDO */
   *pos = position + (int32_t)count;
+#else
+  *pos = (int32_t)((int16_t)stm32_getreg16(priv, STM32_GTIM_CNT_OFFSET));
+#endif
 #else
   /* Return the counter value */
 

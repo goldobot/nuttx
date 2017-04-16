@@ -97,6 +97,18 @@ void stm32_boardinitialize(void)
   (void)stm32_configgpio(GPIO_CAN1_TX);
 #endif
 
+  /* GOLDOBOT : Robot Goldorak. */
+
+  /* GOLDOBOT : GPIOs pour moteur 1 (droite) */
+  (void)stm32_configgpio(GPIO_MAXON1_PWM_IDDLE);
+  (void)stm32_configgpio(GPIO_MAXON1_DIR_P);
+  (void)stm32_configgpio(GPIO_MAXON1_DIS);
+
+  /* GOLDOBOT : GPIOs pour moteur 2 (gauche) */
+  (void)stm32_configgpio(GPIO_MAXON2_PWM_IDDLE);
+  (void)stm32_configgpio(GPIO_MAXON2_DIR_P);
+  (void)stm32_configgpio(GPIO_MAXON2_DIS);
+
   /* Configure on-board LEDs if LED support has been selected. */
 
 #ifdef CONFIG_ARCH_LEDS
@@ -104,8 +116,47 @@ void stm32_boardinitialize(void)
 #endif
 }
 
-
 #if 1 /* FIXME : DEBUG : HACK GOLDO */
+void goldo_maxon2_dir_p(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON2_DIR_P);
+}
+
+void goldo_maxon2_dir_n(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON2_DIR_N);
+}
+
+void goldo_maxon2_en(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON2_EN);
+}
+
+void goldo_maxon2_dis(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON2_DIS);
+}
+
+void goldo_maxon1_dir_p(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON1_DIR_P);
+}
+
+void goldo_maxon1_dir_n(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON1_DIR_N);
+}
+
+void goldo_maxon1_en(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON1_EN);
+}
+
+void goldo_maxon1_dis(void)
+{
+  (void)stm32_configgpio(GPIO_MAXON1_DIS);
+}
+
 #ifdef CONFIG_BOARD_INITIALIZE
 void board_initialize(void)
 {

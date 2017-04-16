@@ -275,9 +275,6 @@
 #  define pwm_dumpgpio(p,m)
 #endif
 
-/* FIXME : DEBUG : HACK GOLDO */
-#define GPIO_TIM2_CH1OUT    (GPIO_ALT|GPIO_AF1|GPIO_SPEED_50MHz|GPIO_PUSHPULL|GPIO_PORTA|GPIO_PIN0)
-
 
 /****************************************************************************
  * Private Types
@@ -1696,6 +1693,13 @@ static int pwm_timer(FAR struct stm32_pwmtimer_s *priv,
 
   ccer &= ~(ATIM_CCER_CC1P | ATIM_CCER_CC2P | ATIM_CCER_CC3P | ATIM_CCER_CC4P);
 
+#if 1 /* FIXME : DEBUG : HACK GOLDO */
+  if (priv->timid == 1 || priv->timid == 2)
+    {
+      ccer |= (ATIM_CCER_CC1P | ATIM_CCER_CC2P | ATIM_CCER_CC3P | ATIM_CCER_CC4P);
+    }
+#endif
+
   /* Enable the output state of the selected channels */
 
   ccer &= ~(ATIM_CCER_CC1E | ATIM_CCER_CC2E | ATIM_CCER_CC3E | ATIM_CCER_CC4E);
@@ -2289,6 +2293,16 @@ static int pwm_shutdown(FAR struct pwm_lowerhalf_s *dev)
 
       stm32_configgpio(pincfg);
     }
+
+#if 1 /* FIXME : DEBUG : HACK : GOLDO */
+  /* Robot Goldorak. */
+
+  /* Moteur 1 (droite) */
+  (void)stm32_configgpio(GPIO_MAXON1_PWM_IDDLE);
+
+  /* Moteur 2 (gauche) */
+  (void)stm32_configgpio(GPIO_MAXON2_PWM_IDDLE);
+#endif
 
   return OK;
 }

@@ -78,7 +78,7 @@ int stm32_pwm_setup(void)
     {
       /* Call stm32_pwminitialize() to get an instance of the PWM interface */
 
-      /* HACK GOLDO : PWM pour moteur DROIT (MAXON1) */
+      /* GOLDOBOT : PWM pour moteur DROIT (MAXON1) */
       pwm0 = stm32_pwminitialize(1);
       if (pwm0 == NULL)
         {
@@ -95,7 +95,7 @@ int stm32_pwm_setup(void)
           return ret;
         }
 
-      /* HACK GOLDO : PWM pour moteur GAUCHE (MAXON2) */
+      /* GOLDOBOT : PWM pour moteur GAUCHE (MAXON2) */
       pwm1 = stm32_pwminitialize(2);
       if (pwm1 == NULL)
         {
