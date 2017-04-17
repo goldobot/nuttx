@@ -1825,7 +1825,7 @@ static int pwm_timer(FAR struct stm32_pwmtimer_s *priv,
  *
  ****************************************************************************/
 
-static  int pwm_update_duty(FAR struct stm32_pwmtimer_s *priv, uint8_t channel,
+static int pwm_update_duty(FAR struct stm32_pwmtimer_s *priv, uint8_t channel,
                             ub16_t duty)
 {
   /* Register offset */
@@ -1889,6 +1889,15 @@ static  int pwm_update_duty(FAR struct stm32_pwmtimer_s *priv, uint8_t channel,
 
   return OK;
 }
+
+#if 1 /* FIXME : DEBUG : HACK GOLDO */
+int goldo_pwm_update_duty(FAR struct pwm_lowerhalf_s *dev, ub16_t duty)
+{
+  FAR struct stm32_pwmtimer_s *priv = (FAR struct stm32_pwmtimer_s *)dev;
+  return pwm_update_duty(priv,priv->channels[0].channel,duty);
+}
+#endif
+
 #endif
 
 /****************************************************************************

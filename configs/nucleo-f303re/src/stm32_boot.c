@@ -116,47 +116,7 @@ void stm32_boardinitialize(void)
 #endif
 }
 
-#if 1 /* FIXME : DEBUG : HACK GOLDO */
-void goldo_maxon2_dir_p(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON2_DIR_P);
-}
-
-void goldo_maxon2_dir_n(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON2_DIR_N);
-}
-
-void goldo_maxon2_en(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON2_EN);
-}
-
-void goldo_maxon2_dis(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON2_DIS);
-}
-
-void goldo_maxon1_dir_p(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON1_DIR_P);
-}
-
-void goldo_maxon1_dir_n(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON1_DIR_N);
-}
-
-void goldo_maxon1_en(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON1_EN);
-}
-
-void goldo_maxon1_dis(void)
-{
-  (void)stm32_configgpio(GPIO_MAXON1_DIS);
-}
-
+/* GOLDOBOT : Goldorak needs board_initialize() */
 #ifdef CONFIG_BOARD_INITIALIZE
 void board_initialize(void)
 {
@@ -201,5 +161,4 @@ stm32_i2c_register(int bus)
         }
     }
 }
-#endif
 
