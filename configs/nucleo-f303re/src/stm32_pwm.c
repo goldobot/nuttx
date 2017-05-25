@@ -193,6 +193,13 @@ int stm32_pwm_setup(void)
           return ret;
         }
 
+      /* GOLDOBOT : motors disabled by default */
+      goldo_maxon1_dis();
+      goldo_maxon2_dis();
+
+      goldo_maxon1_speed(0);
+      goldo_maxon2_speed(0);
+
       /* Now we are initialized */
 
       initialized = true;

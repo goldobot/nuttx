@@ -109,6 +109,11 @@ void stm32_boardinitialize(void)
   (void)stm32_configgpio(GPIO_MAXON2_DIR_P);
   (void)stm32_configgpio(GPIO_MAXON2_DIS);
 
+#if 1 /* FIXME : DEBUG : HACK homologation 2017 */
+  stm32_configgpio(GPIO_GOLDO_START);
+  stm32_configgpio(GPIO_GOLDO_OBSTACLE);
+#endif
+
   /* Configure on-board LEDs if LED support has been selected. */
 
 #ifdef CONFIG_ARCH_LEDS
@@ -129,7 +134,9 @@ void board_initialize(void)
   board_app_initialize(0);
 #endif
 
+#if 0 /* FIXME : DEBUG : HACK homologation 2017 */
   stm32_i2c_register(1);
+#endif
   //board_pwm_setup();
 
   /* CC3000 wireless initialization */
@@ -140,6 +147,7 @@ void board_initialize(void)
 }
 #endif
 
+#if 0 /* FIXME : DEBUG : HACK homologation 2017 */
 void
 stm32_i2c_register(int bus)
 {
@@ -161,4 +169,17 @@ stm32_i2c_register(int bus)
         }
     }
 }
+#endif
+
+#if 1 /* FIXME : DEBUG : HACK homologation 2017 */
+int goldo_get_start_gpio_state(void)
+{
+  return stm32_gpioread(GPIO_GOLDO_START);
+}
+
+int goldo_get_obstacle_gpio_state(void)
+{
+  return stm32_gpioread(GPIO_GOLDO_OBSTACLE);
+}
+#endif
 
