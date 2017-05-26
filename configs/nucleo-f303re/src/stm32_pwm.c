@@ -63,6 +63,8 @@
 struct pwm_lowerhalf_s *g_pwm0;
 struct pwm_lowerhalf_s *g_pwm1;
 
+struct pwm_lowerhalf_s *g_pwm8; /* funny act */
+
 int goldo_pwm_update_duty(FAR struct pwm_lowerhalf_s *dev, ub16_t duty);
 
 void goldo_maxon2_dir_p(void)
@@ -187,6 +189,23 @@ int stm32_pwm_setup(void)
       /* Register the PWM driver at "/dev/pwm1" */
 
       ret = pwm_register("/dev/pwm1", g_pwm1);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register failed: %d\n", ret);
+          return ret;
+        }
+
+      /* GOLDOBOT : PWM pour funny act */
+      g_pwm8 = stm32_pwminitialize(8);
+      if (g_pwm8 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half\n");
+          return -ENODEV;
+        }
+
+      /* Register the PWM driver at "/dev/pwm8" */
+
+      ret = pwm_register("/dev/pwm8", g_pwm8);
       if (ret < 0)
         {
           pwmerr("ERROR: pwm_register failed: %d\n", ret);

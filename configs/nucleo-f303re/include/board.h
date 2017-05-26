@@ -259,6 +259,8 @@
 			       GPIO_OUTPUT_CLEAR|GPIO_PORTC|GPIO_PIN1)
                                             /* PC.1 */
 
+#define GPIO_TIM8_CH2OUT GPIO_TIM8_CH2OUT_3 /* PA.14 */
+
 /* QEI (odometrie) */
 #define GPIO_TIM3_CH1IN  GPIO_TIM3_CH1IN_2  /* PB.4 */
 #define GPIO_TIM3_CH2IN  GPIO_TIM3_CH2IN_3  /* PB.5 */
