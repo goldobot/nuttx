@@ -1693,13 +1693,6 @@ static int pwm_timer(FAR struct stm32_pwmtimer_s *priv,
 
   ccer &= ~(ATIM_CCER_CC1P | ATIM_CCER_CC2P | ATIM_CCER_CC3P | ATIM_CCER_CC4P);
 
-#if 1 /* FIXME : DEBUG : HACK GOLDO */
-  if (priv->timid == 1 || priv->timid == 2)
-    {
-      ccer |= (ATIM_CCER_CC1P | ATIM_CCER_CC2P | ATIM_CCER_CC3P | ATIM_CCER_CC4P);
-    }
-#endif
-
   /* Enable the output state of the selected channels */
 
   ccer &= ~(ATIM_CCER_CC1E | ATIM_CCER_CC2E | ATIM_CCER_CC3E | ATIM_CCER_CC4E);
