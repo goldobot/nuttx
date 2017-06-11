@@ -277,8 +277,8 @@
 #define GPIO_USART1_RX GPIO_USART1_RX_1     /* PA.10 */
 #define GPIO_USART1_TX GPIO_USART1_TX_1     /* PA.9 */
 #define GPIO_USART1_RS485_DIR (GPIO_OUTPUT|GPIO_PUSHPULL|GPIO_SPEED_50MHz| \
-                               GPIO_OUTPUT_CLEAR|GPIO_PORTA|GPIO_PIN0)
-                                            /* PA.0 */
+                               GPIO_OUTPUT_CLEAR|GPIO_PORTB|GPIO_PIN2)
+                                            /* PB.2 */
 
 /* DMA channels *************************************************************/
 /* ADC */
