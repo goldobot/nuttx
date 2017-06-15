@@ -64,6 +64,8 @@ struct pwm_lowerhalf_s *g_pwm0;
 struct pwm_lowerhalf_s *g_pwm1;
 
 struct pwm_lowerhalf_s *g_pwm8; /* funny act */
+struct pwm_lowerhalf_s *g_pwm15; /* pompe droite */
+struct pwm_lowerhalf_s *g_pwm16; /* pompe gauche */
 
 int goldo_pwm_update_duty(FAR struct pwm_lowerhalf_s *dev, ub16_t duty);
 
@@ -140,6 +142,66 @@ void goldo_maxon1_speed(int32_t s)
   duty = b16frac(abs_s);
   (void)goldo_pwm_update_duty(g_pwm0, (int)duty);
 }
+
+void goldo_pump1_iddle(void)
+{
+  (void)stm32_configgpio(GPIO_PUMP1_PWM_IDDLE);
+}
+
+void goldo_pump2_iddle(void)
+{
+  (void)stm32_configgpio(GPIO_PUMP2_PWM_IDDLE);
+}
+
+int goldo_pump_init(FAR struct pwm_lowerhalf_s *dev)
+{
+  int ret;
+  struct pwm_info_s info;
+
+  info.frequency = 100;
+  info.duty = 0;
+
+  ret = dev->ops->setup(dev);
+  if (ret < 0) {
+    pwmerr("ERROR: goldo_pwm_setup() failed: %d\n", ret);
+    return ret;
+  }
+
+  ret = dev->ops->start(dev, &info);
+  if (ret < 0) {
+    pwmerr("ERROR: goldo_pwm_start() failed: %d\n", ret);
+    return ret;
+  }
+}
+
+void goldo_pump1_speed(int32_t s)
+{
+  ub16_t duty;
+
+  if (s==0) {
+    (void)stm32_configgpio(GPIO_PUMP1_PWM_IDDLE);
+  } else {
+    (void)stm32_configgpio(GPIO_TIM15_CH1OUT);
+  }
+
+  duty = b16frac(s);
+  (void)goldo_pwm_update_duty(g_pwm15, (int)duty);
+}
+
+void goldo_pump2_speed(int32_t s)
+{
+  ub16_t duty;
+
+  if (s==0) {
+    (void)stm32_configgpio(GPIO_PUMP2_PWM_IDDLE);
+  } else {
+    (void)stm32_configgpio(GPIO_TIM16_CH1OUT);
+  }
+
+  duty = b16frac(s);
+  (void)goldo_pwm_update_duty(g_pwm16, (int)duty);
+}
+
 #endif
 
 /************************************************************************************
@@ -211,6 +273,60 @@ int stm32_pwm_setup(void)
           pwmerr("ERROR: pwm_register failed: %d\n", ret);
           return ret;
         }
+
+      /* GOLDOBOT : PWM pour pompe droite */
+      g_pwm15 = stm32_pwminitialize(15);
+      if (g_pwm15 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half (15)\n");
+          return -ENODEV;
+        }
+
+#if 0
+      /* Register the PWM driver at "/dev/pwm15" */
+      ret = pwm_register("/dev/pwm15", g_pwm15);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register(15) failed: %d\n", ret);
+          return ret;
+        }
+#else
+      ret = goldo_pump_init(g_pwm15);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: goldo_pump_init(15) failed: %d\n", ret);
+          return ret;
+        }
+#endif
+
+      goldo_pump1_iddle();
+
+      /* GOLDOBOT : PWM pour pompe gauche */
+      g_pwm16 = stm32_pwminitialize(16);
+      if (g_pwm16 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half (16)\n");
+          return -ENODEV;
+        }
+
+#if 0
+      /* Register the PWM driver at "/dev/pwm16" */
+      ret = pwm_register("/dev/pwm16", g_pwm16);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register(16) failed: %d\n", ret);
+          return ret;
+        }
+#else
+      ret = goldo_pump_init(g_pwm16);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: goldo_pump_init(16) failed: %d\n", ret);
+          return ret;
+        }
+#endif
+
+      goldo_pump2_iddle();
 
       /* GOLDOBOT : motors disabled by default */
       goldo_maxon1_dis();
