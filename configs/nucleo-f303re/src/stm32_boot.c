@@ -113,6 +113,9 @@ void stm32_boardinitialize(void)
   stm32_configgpio(GPIO_GOLDO_START);
   stm32_configgpio(GPIO_GOLDO_OBSTACLE);
 #endif
+#if 1 /* FIXME : DEBUG : HACK Belgique 2018 */
+  stm32_configgpio(GPIO_GOLDO_COULEUR);
+#endif
 
   /* Configure on-board LEDs if LED support has been selected. */
 
@@ -182,4 +185,12 @@ int goldo_get_obstacle_gpio_state(void)
   return stm32_gpioread(GPIO_GOLDO_OBSTACLE);
 }
 #endif
+
+#if 1 /* FIXME : DEBUG : HACK Belgique 2018 */
+int goldo_get_couleur_gpio_state(void)
+{
+  return stm32_gpioread(GPIO_GOLDO_COULEUR);
+}
+#endif
+
 
