@@ -63,7 +63,9 @@
 struct pwm_lowerhalf_s *g_pwm0;
 struct pwm_lowerhalf_s *g_pwm1;
 
-struct pwm_lowerhalf_s *g_pwm8; /* funny act */
+struct pwm_lowerhalf_s *g_pwm8;  /* servo ouverture trappe */
+struct pwm_lowerhalf_s *g_pwm15; /* servo elevateur droit  */
+struct pwm_lowerhalf_s *g_pwm16; /* servo elevateur gauche */
 
 int goldo_pwm_update_duty(FAR struct pwm_lowerhalf_s *dev, ub16_t duty);
 
@@ -140,7 +142,35 @@ void goldo_maxon1_speed(int32_t s)
   duty = b16frac(abs_s);
   (void)goldo_pwm_update_duty(g_pwm0, (int)duty);
 }
-#endif
+
+void goldo_pump1_iddle(void)
+{
+  /* FIXME : TODO */
+}
+
+void goldo_pump2_iddle(void)
+{
+  /* FIXME : TODO */
+}
+
+int goldo_pump_init(FAR struct pwm_lowerhalf_s *dev)
+{
+  /* FIXME : TODO */
+
+  return 0;
+}
+
+void goldo_pump1_speed(int32_t s)
+{
+  /* FIXME : TODO */
+}
+
+void goldo_pump2_speed(int32_t s)
+{
+  /* FIXME : TODO */
+}
+
+#endif /* HACK GOLDO */
 
 /************************************************************************************
  * Name: stm32_pwm_setup
@@ -169,14 +199,13 @@ int stm32_pwm_setup(void)
           return -ENODEV;
         }
 
-      /* Register the PWM driver at "/dev/pwm0" */
-
       ret = pwm_register("/dev/pwm0", g_pwm0);
       if (ret < 0)
         {
           pwmerr("ERROR: pwm_register failed: %d\n", ret);
           return ret;
         }
+
 
       /* GOLDOBOT : PWM pour moteur GAUCHE (MAXON2) */
       g_pwm1 = stm32_pwminitialize(2);
@@ -186,8 +215,6 @@ int stm32_pwm_setup(void)
           return -ENODEV;
         }
 
-      /* Register the PWM driver at "/dev/pwm1" */
-
       ret = pwm_register("/dev/pwm1", g_pwm1);
       if (ret < 0)
         {
@@ -195,22 +222,54 @@ int stm32_pwm_setup(void)
           return ret;
         }
 
-      /* GOLDOBOT : PWM pour funny act */
+
+      /* GOLDOBOT 2018 PR : servo ouverture trappe */
       g_pwm8 = stm32_pwminitialize(8);
       if (g_pwm8 == NULL)
         {
-          pwmerr("ERROR: Failed to get the STM32 PWM lower half\n");
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half (8)\n");
           return -ENODEV;
         }
-
-      /* Register the PWM driver at "/dev/pwm8" */
 
       ret = pwm_register("/dev/pwm8", g_pwm8);
       if (ret < 0)
         {
-          pwmerr("ERROR: pwm_register failed: %d\n", ret);
+          pwmerr("ERROR: pwm_register (8) failed: %d\n", ret);
           return ret;
         }
+
+
+      /* GOLDOBOT 2018 PR : servo elevateur droit  */
+      g_pwm15 = stm32_pwminitialize(15);
+      if (g_pwm15 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half (15)\n");
+          return -ENODEV;
+        }
+
+      ret = pwm_register("/dev/pwm15", g_pwm15);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register (15) failed: %d\n", ret);
+          return ret;
+        }
+
+
+      /* GOLDOBOT 2018 PR : servo elevateur gauche  */
+      g_pwm16 = stm32_pwminitialize(16);
+      if (g_pwm16 == NULL)
+        {
+          pwmerr("ERROR: Failed to get the STM32 PWM lower half (16)\n");
+          return -ENODEV;
+        }
+
+      ret = pwm_register("/dev/pwm16", g_pwm16);
+      if (ret < 0)
+        {
+          pwmerr("ERROR: pwm_register (16) failed: %d\n", ret);
+          return ret;
+        }
+
 
       /* GOLDOBOT : motors disabled by default */
       goldo_maxon1_dis();

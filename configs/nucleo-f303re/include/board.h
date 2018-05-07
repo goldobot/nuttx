@@ -104,9 +104,9 @@
 
 #define STM32_APB2_TIM1_CLKIN   (STM32_PCLK2_FREQUENCY)
 #define STM32_APB2_TIM8_CLKIN   (STM32_PCLK2_FREQUENCY)
-#define STM32_APB1_TIM15_CLKIN  (STM32_PCLK2_FREQUENCY)
-#define STM32_APB1_TIM16_CLKIN  (STM32_PCLK2_FREQUENCY)
-#define STM32_APB1_TIM17_CLKIN  (STM32_PCLK2_FREQUENCY)
+#define STM32_APB2_TIM15_CLKIN  (STM32_PCLK2_FREQUENCY)
+#define STM32_APB2_TIM16_CLKIN  (STM32_PCLK2_FREQUENCY)
+#define STM32_APB2_TIM17_CLKIN  (STM32_PCLK2_FREQUENCY)
 
 /* APB1 clock (PCLK1) is HCLK/2 (36MHz) */
 
@@ -209,8 +209,9 @@
 /* Alternate function pin selections ****************************************/
 /* CAN */
 
-#define GPIO_CAN1_RX GPIO_CAN_RX_2 /* PA.11 */
-#define GPIO_CAN1_TX GPIO_CAN_TX_2 /* PA.12 */
+/* FIXME : TODO */
+//#define GPIO_CAN1_RX GPIO_CAN_RX_2 /* PA.11 */
+//#define GPIO_CAN1_TX GPIO_CAN_TX_2 /* PA.12 */
 
 /* I2C */
 
@@ -259,7 +260,11 @@
 			       GPIO_OUTPUT_CLEAR|GPIO_PORTC|GPIO_PIN1)
                                             /* PC.1 */
 
+/* PWM servo */
 #define GPIO_TIM8_CH2OUT GPIO_TIM8_CH2OUT_3 /* PA.14 */
+/* FIXME : DEBUG : provisoire */
+#define GPIO_TIM15_CH1OUT GPIO_TIM15_CH1OUT_1 /* PB.14 */
+#define GPIO_TIM16_CH1OUT GPIO_TIM16_CH1OUT_1 /* PA.12 */
 
 /* QEI (odometrie) */
 #define GPIO_TIM3_CH1IN  GPIO_TIM3_CH1IN_2  /* PB.4 */
