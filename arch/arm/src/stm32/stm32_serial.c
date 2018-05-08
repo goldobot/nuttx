@@ -2203,6 +2203,12 @@ static int up_receive(struct uart_dev_s *dev, unsigned int *status)
 
   rdr      = up_serialin(priv, STM32_USART_RDR_OFFSET);
 
+#if 0 /* FIXME : DEBUG : HACK GOLDO */
+  if (priv->usartbase == STM32_USART3_BASE) {
+    up_lowputc((rdr & 0xff));
+  }
+#endif
+
   /* Get the Rx byte plux error information.  Return those in status */
 
   *status  = priv->sr << 16 | rdr;
@@ -2212,6 +2218,14 @@ static int up_receive(struct uart_dev_s *dev, unsigned int *status)
 
   return rdr & 0xff;
 }
+
+#if 0 /* FIXME : DEBUG : HACK GOLDO */
+int goldo_hack_is_usart3(struct uart_dev_s *dev)
+{
+  if ((struct up_dev_s *)dev->priv==(&g_usart3priv)) return 1;
+  return 0;
+}
+#endif
 #endif
 
 /****************************************************************************
